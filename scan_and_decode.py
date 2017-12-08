@@ -29,7 +29,6 @@ def main():
 
         scanner = zbar.ImageScanner()
         scanner.scan(zbar_image)
-
         for decoded in zbar_image:
             print(decoded.data)
     return True
