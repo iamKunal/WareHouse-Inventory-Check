@@ -31,6 +31,7 @@ def main():
         scanner.scan(zbar_image)
         for decoded in zbar_image:
             print(decoded.data)
+            print (decoded.type == zbar.Symbol.EAN13)
     return True
 
 if __name__ == "__main__":
