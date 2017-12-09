@@ -2,6 +2,7 @@ import zbar
 
 from PIL import Image
 import cv2
+import detecttriangle
 
 def main():
     # Select and start Camera.
@@ -32,6 +33,9 @@ def main():
         for decoded in zbar_image:
             print(decoded.data)
             print (decoded.type == zbar.Symbol.EAN13)
+        triangle = detecttriangle.DetectTriangle(100, gray)
+        triangle.has_triangle(frame)
+        
     return True
 
 if __name__ == "__main__":
