@@ -42,16 +42,6 @@ def main():
 #        triangle = detecttriangle.DetectTriangle(100, gray)
 #        triangle_present = triangle.has_triangle(frame)
 #        triangle_location = triangle.location
-        lower,upper=([0, 146, 190], [142, 255, 255])
-        lower = np.array(lower, dtype = "uint8")
-        upper = np.array(upper, dtype = "uint8")
-        # find the colors within the specified boundaries and apply
-        # the mask
-        mask = cv2.inRange(frame, lower, upper)
-        output = cv2.bitwise_and(frame, frame, mask = mask)
-        ret,thresh = cv2.threshold(output,10,255,1)
-        # show the images
-        cv2.imshow("yellow", np.hstack([thresh, output]))
     return True
 
 if __name__ == "__main__":

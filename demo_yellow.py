@@ -2,6 +2,8 @@
 
 import numpy as np
 import cv2
+from PIL import Image
+import time
 
 def get_frame(frame, DEBUG=False):
     lower,upper=([0, 75, 75], [75, 255, 255])
@@ -9,9 +11,15 @@ def get_frame(frame, DEBUG=False):
     upper = np.array(upper, dtype = "uint8")
     mask = cv2.inRange(frame, lower, upper)
     output = cv2.bitwise_and(frame, frame, mask = mask)
-    gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
-    ret,thresh = cv2.threshold(gray,0,255,1)
+    ret,thresh = cv2.threshold(output,10,255,1)
 
     if DEBUG:
-        cv2.imshow("yellow", np.hstack([thresh, gray]))
+        cv2.imshow("yellow", np.hstack([thresh, output]))
     return thresh
+img = cv2.imread('/home/kunal/Desktop/img2.png')
+
+cv2.imshow('hey', img)
+
+get_frame(img,True)
+if cv2.waitKey(10000) & 0xFF == ord('q'):       #q to quit
+    cv2.destroyAllWindows()
