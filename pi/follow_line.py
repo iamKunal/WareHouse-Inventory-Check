@@ -8,9 +8,12 @@ import time
 
 from imutils.video.pivideostream import PiVideoStream
 
+
+resolution = (1920, 1080)
+
 def main():
     # Select and start Camera.
-    vs = PiVideoStream().start()
+    vs = PiVideoStream(resolution).start()
     time.sleep(2)
     while True:
         if cv2.waitKey(100) & 0xFF == ord('q'):       #q to quit
