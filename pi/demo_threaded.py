@@ -23,8 +23,8 @@ while fps._numFrames < 200:
 
     # check to see if the frame should be displayed to our screen
 #	if args["display"] > 0:
-        cv2.imshow("Frame", frame)
-        key = cv2.waitKey(1) & 0xFF
+    cv2.imshow("Frame", frame)
+    key = cv2.waitKey(1) & 0xFF
     # update the FPS counter
     fps.update()
  
