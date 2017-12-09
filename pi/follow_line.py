@@ -4,12 +4,14 @@ from PIL import Image
 import cv2
 import get_yellow
 import numpy as np
+import time
 
 from imutils.video.pivideostream import PiVideoStream
 
 def main():
     # Select and start Camera.
     vs = PiVideoStream().start()
+    time.sleep(2)
     while True:
         if cv2.waitKey(100) & 0xFF == ord('q'):       #q to quit
             cv2.destroyAllWindows()
