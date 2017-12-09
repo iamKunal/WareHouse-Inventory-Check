@@ -8,10 +8,11 @@ import hascodes
 import numpy as np
 import time
 from imutils.video.pivideostream import PiVideoStream
+from pi_camera_settings import camera_settings
 
 def main():
     # Select and start Camera.
-    vs = PiVideoStream().start()
+    vs = PiVideoStream(camera_settings['resolution'],camera_settings['fps']).start()
     time.sleep(2)
     while True:
         if cv2.waitKey(100) & 0xFF == ord('q'):       #q to quit
