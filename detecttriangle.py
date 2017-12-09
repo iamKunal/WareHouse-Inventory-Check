@@ -22,20 +22,21 @@ def isEquilateral(angles):
 class DetectTriangle:
     thresh_area = 100.0
     gray = None
-    
-    
+    max_area =-float('inf')
+    location = None
     def __init__(self,thresh_area,gray):
         self.gray=gray
         self.thresh_area=thresh_area
-    def has_triangle(self, img=None):
+    def has_triangle(self, img=None, DEBUG=False):
         ret,thresh = cv2.threshold(self.gray,100,255,1)
-        cv2.imshow('threshold', thresh)
+        if DEBUG:
+            cv2.imshow('threshold', thresh)
         _,contours,h = cv2.findContours(thresh,1,2)
         for cnt in contours:
             area = cv2.contourArea(cnt)
             approx = cv2.approxPolyDP(cnt,0.01*cv2.arcLength(cnt,True),True)
 #            print len(approx)
-            if len(approx)==3 and area > self.thresh_area:
+            if len(approx)==3 and area > self.thresh_area and area > self.max_area:
 #                print "triangle"
 #                print cnt[0]
 #                print 'area =', area
@@ -49,8 +50,12 @@ class DetectTriangle:
                 angles = [ k*180/math.pi for k in angles]
 #                print ans
                 if isEquilateral(angles):
+                    self.max_area=area
                     if img is not None:
                         cv2.drawContours(img,[approx],0,(0,255,0),-1)
                         cv2.imshow('triangle',img)
-                    else:
-                        print "Found"
+                    self.location=approx
+        if self.location is not None:
+            return True
+        else:
+            return False

@@ -1,8 +1,11 @@
+#!/usr/bin/env python
 import zbar
 
 from PIL import Image
 import cv2
 import detecttriangle
+import hascodes
+import numpy as np
 
 def main():
     # Select and start Camera.
@@ -23,19 +26,33 @@ def main():
         cv2.imshow('Video Capture', frame)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        image = Image.fromarray(gray)
-        width, height = image.size
-        zbar_image = zbar.Image(width, height, 'Y800', image.tobytes())
-
-        scanner = zbar.ImageScanner()
-        scanner.scan(zbar_image)
-        for decoded in zbar_image:
-            print(decoded.data)
-            print (decoded.type == zbar.Symbol.EAN13)
-        triangle = detecttriangle.DetectTriangle(100, gray)
-        triangle.has_triangle(frame)
-        
+        ret,thresh = cv2.threshold(gray,127,255,1)
+        cv2.imshow('Gray', np.hstack([gray,thresh]))
+        codes = hascodes.GetCodes()
+        codes.scan(gray)
+#        if codes.hasQR:
+##            print len(codes.qr)
+#            for c in codes.qr:
+#                print c.data
+        if codes.hasBar:
+#            print len(codes.bar)
+            for c in codes.bar:
+                print c.data
+        print "Frame Done"
+#        triangle = detecttriangle.DetectTriangle(100, gray)
+#        triangle_present = triangle.has_triangle(frame)
+#        triangle_location = triangle.location
+            # create NumPy arrays from the boundaries
+#        lower,upper=([25, 146, 190], [142, 210, 255])
+#        lower = np.array(lower, dtype = "uint8")
+#        upper = np.array(upper, dtype = "uint8")
+#        # find the colors within the specified boundaries and apply
+#        # the mask
+#        mask = cv2.inRange(frame, lower, upper)
+#        output = cv2.bitwise_and(frame, frame, mask = mask)
+#        ret,thresh = cv2.threshold(output,10,255,1)
+#        # show the images
+#        cv2.imshow("yellow", np.hstack([thresh, output]))
     return True
 
 if __name__ == "__main__":
