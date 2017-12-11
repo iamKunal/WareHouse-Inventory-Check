@@ -14,12 +14,15 @@ def main():
     # Select and start Camera.
     vs = PiVideoStream(camera_settings['resolution'],camera_settings['fps']).start()
     time.sleep(2)
+    cnt = 0
+    strt = time.time()
     while True:
         if cv2.waitKey(100) & 0xFF == ord('q'):       #q to quit
             cv2.destroyAllWindows()
             break
 
         frame = vs.read()
+        cnt+=1
         if frame is None:
             print "Error !"
             return False
@@ -42,6 +45,7 @@ def main():
         triangle = detecttriangle.DetectTriangle(100, gray)
         triangle_present = triangle.has_triangle(frame, DEBUG=False)
         triangle_location = triangle.location
+    print "[*]FPS =",cnt/(time.time()-strt)
     return True
 
 if __name__ == "__main__":

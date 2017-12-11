@@ -15,18 +15,22 @@ def main():
     # Select and start Camera.
     vs = PiVideoStream(camera_settings['resolution'],camera_settings['fps']).start()
     time.sleep(2)
+    cnt = 0
+    strt = time.time()
     while True:
         if cv2.waitKey(100) & 0xFF == ord('q'):       #q to quit
             cv2.destroyAllWindows()
             break
 
         frame = vs.read()
+        cnt+=1
         if frame is None:
             print "Error !"
             return False
         cv2.imshow('Video Capture', frame)
         line = get_yellow.get_frame(frame, DEBUG=True)
 #        cv2.imshow("yellow", get_yellow.get_frame(frame))
+    print "[*]FPS =",cnt/(time.time()-strt)
     return True
 
 if __name__ == "__main__":
