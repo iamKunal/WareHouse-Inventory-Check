@@ -31,7 +31,7 @@ class DetectTriangle:
         ret,thresh = cv2.threshold(self.gray,100,255,1)
         if DEBUG:
             cv2.imshow('threshold', thresh)
-        contours,h = cv2.findContours(thresh,1,2)
+        _,contours,h = cv2.findContours(thresh,1,2)
         for cnt in contours:
             area = cv2.contourArea(cnt)
             approx = cv2.approxPolyDP(cnt,0.01*cv2.arcLength(cnt,True),True)
