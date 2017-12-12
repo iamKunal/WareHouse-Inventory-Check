@@ -33,8 +33,8 @@ def main():
         line = get_yellow.get_frame(frame, DEBUG=False)
 #        cv2.imshow("yellow", get_yellow.get_frame(frame))
         cv2.imshow('Canny', cv2.Canny(line,100,200))
-        rectangle = detectrectangles.Rectangle(100, line)
-        rectangle.has_rectangle(img=None, DEBUG=False)
+        # rectangle = detectrectangles.Rectangle(100, line)
+        # rectangle.has_rectangle(img=None, DEBUG=False)
     return True
 
 if __name__ == "__main__":
