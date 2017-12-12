@@ -30,6 +30,8 @@ def main():
         cv2.imshow('Video Capture', frame)
         line = get_yellow.get_frame(frame, DEBUG=True)
 #        cv2.imshow("yellow", get_yellow.get_frame(frame))
+        rectangle = detectrectangles.Rectangle(100, line)
+        rectangle.has_rectangle(img=frame, DEBUG=False)
     print "[*]FPS =",cnt/(time.time()-strt)
     return True
 

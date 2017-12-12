@@ -19,42 +19,42 @@ def isEquilateral(angles):
         flag = flag and a > 50 and a < 70
     return flag
 
-class DetectTriangle:
+class Rectangle:
     thresh_area = 100.0
-    gray = None
+    thresh = None
     max_area =-float('inf')
     location = None
-    def __init__(self,thresh_area,gray):
-        self.gray=gray
+    def __init__(self,thresh_area,thresh):
+        self.thresh=thresh
         self.thresh_area=thresh_area
-    def has_triangle(self, img=None, DEBUG=False):
-        ret,thresh = cv2.threshold(self.gray,100,255,1)
+    def has_rectangle(self, img=None, DEBUG=False):
+        # ret,thresh = cv2.threshold(self.thresh,100,255,1)
         if DEBUG:
-            cv2.imshow('threshold', thresh)
-        _,contours,h = cv2.findContours(thresh,1,2)
+            cv2.imshow('threshold', self.thresh)
+        _,contours,h = cv2.findContours(self.thresh,1,2)
         for cnt in contours:
             area = cv2.contourArea(cnt)
-            approx = cv2.approxPolyDP(cnt,0.01*cv2.arcLength(cnt,True),True)
+            approx = cv2.approxPolyDP(cnt,0.02*cv2.arcLength(cnt,True),True)
 #            print len(approx)
-            if len(approx)==3 and area > self.thresh_area and area > self.max_area:
+            if len(approx)>=4 and area > self.thresh_area and area > self.max_area:
 #                print "triangle"
 #                print cnt[0]
 #                print 'area =', area
 #                print approx[0][0].tolist()
-                pts = [approx[i][0].astype(int).tolist() for i in range(3)]
-#                print pts
-                vectors = [vector(pts[i],pts[(i+1)%3]) for i in range(3)]
-#                print vectors
-                angles = [ angle(vectors[i],vectors[(i+1)%3]) for i in range(3)]
+#                 pts = [approx[i][0].astype(int).tolist() for i in range(3)]
+# #                print pts
+#                 vectors = [vector(pts[i],pts[(i+1)%3]) for i in range(3)]
+# #                print vectors
+#                 angles = [ angle(vectors[i],vectors[(i+1)%3]) for i in range(3)]
+# #                print ans
+#                 angles = [ k*180/math.pi for k in angles]
 #                print ans
-                angles = [ k*180/math.pi for k in angles]
-#                print ans
-                if isEquilateral(angles):
-                    self.max_area=area
-                    if img is not None:
-                        cv2.drawContours(img,[approx],0,(0,255,0),-1)
-                        cv2.imshow('triangle',img)
-                    self.location=approx
+                # if isEquilateral(angles):
+                #     self.max_area=area
+                if img is not None:
+                    cv2.drawContours(img,[approx],0,(0,255,0),-1)
+                    cv2.imshow('triangle',img)
+                self.location=approx
         if self.location is not None:
             return True
         else:
