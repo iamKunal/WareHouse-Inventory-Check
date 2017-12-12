@@ -5,6 +5,7 @@ import cv2
 import get_yellow
 import numpy as np
 import time
+import detectrectangles
 
 from imutils.video.pivideostream import PiVideoStream
 from pi_camera_settings import camera_settings

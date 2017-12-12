@@ -23,16 +23,18 @@ def main():
         if cv2.waitKey(100) & 0xFF == ord('q'):       #q to quit
             cv2.destroyAllWindows()
             break
-        frame = img
+        height,width = img.shape[:2]
+        frame = img[10:width-10,0:height]
         # ret, frame = capture.read()
         # if ret==False:
         #     print "Error !"
         #     return False
         cv2.imshow('Video Capture', frame)
-        line = get_yellow.get_frame(frame, DEBUG=True)
+        line = get_yellow.get_frame(frame, DEBUG=False)
 #        cv2.imshow("yellow", get_yellow.get_frame(frame))
+        cv2.imshow('Canny', cv2.Canny(line,100,200))
         rectangle = detectrectangles.Rectangle(100, line)
-        rectangle.has_rectangle(img=frame, DEBUG=False)
+        rectangle.has_rectangle(img=None, DEBUG=False)
     return True
 
 if __name__ == "__main__":
