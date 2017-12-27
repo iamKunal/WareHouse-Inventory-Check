@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
 camera_settings ={
-    'resolution' : (320, 240),
-    'fps' : 20
+    'resolution' : (400, 300),
+    'fps' : 30
 }
