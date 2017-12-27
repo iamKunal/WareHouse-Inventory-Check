@@ -31,9 +31,17 @@ def main():
         line = get_yellow.get_frame(frame, DEBUG=True)
         # cv2.imshow("yellow", get_yellow.get_frame(frame))
         # cv2.imshow('Canny', cv2.Canny(line,100,200))
-        canny = cv2.Canny(line,100,200)
+        # canny = cv2.Canny(line,100,200)
+        kernel = np.ones((5,5),np.uint8)
+        line = cv2.morphologyEx(line, cv2.MORPH_OPEN, kernel)
         rectangle = detectrectangles.Rectangle(100, line)
         rectangle.has_rectangle(img=frame, DEBUG=True)
+        dst = cv2.cornerHarris(line,2,3,0.04)
+        #----result is dilated for marking the corners, not important-------------
+        dst = cv2.dilate(dst,None) 
+        #----Threshold for an optimal value, it may vary depending on the image---
+        img=frame
+        img[dst>0.01*dst.max()]=[0,0,255]
         if rectangle.contour is not None:
             ## Centroid of the area
             # M = cv2.moments(rectangle.contour)
@@ -60,8 +68,8 @@ def main():
             lefty = int((-x*vy/vx) + y)
             righty = int(((frame.shape[1]-x)*vy/vx)+y)
             cv2.line(frame,(frame.shape[1]-1,righty),(0,lefty),255,2)
-
         cv2.imshow('Video Capture', frame)
+        cv2.imshow('trial_corener', img)
     print "[*]FPS =",fpscnt/(time.time()-strt)
     return True
 
