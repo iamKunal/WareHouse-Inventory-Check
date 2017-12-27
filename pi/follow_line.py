@@ -42,7 +42,7 @@ def main():
         # dst = cv2.dilate(dst,None) 
         # #----Threshold for an optimal value, it may vary depending on the image---
         # img=frame
-        img[dst>0.01*dst.max()]=[0,0,255]
+        # img[dst>0.01*dst.max()]=[0,0,255]
         if rectangle.contour is not None:
             ## Centroid of the area
             # M = cv2.moments(rectangle.contour)
