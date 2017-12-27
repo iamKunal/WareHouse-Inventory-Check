@@ -43,6 +43,10 @@ def main():
         # #----Threshold for an optimal value, it may vary depending on the image---
         # img=frame
         # img[dst>0.01*dst.max()]=[0,0,255]
+
+        laplacian = cv2.Laplacian(line,cv2.CV_64F)
+        sobelx = cv2.Sobel(line,cv2.CV_64F,1,0,ksize=5)
+        sobely = cv2.Sobel(line,cv2.CV_64F,0,1,ksize=5)
         if rectangle.contour is not None:
             ## Centroid of the area
             # M = cv2.moments(rectangle.contour)
@@ -70,8 +74,12 @@ def main():
             righty = int(((frame.shape[1]-x)*vy/vx)+y)
             cv2.line(frame,(frame.shape[1]-1,righty),(0,lefty),255,2)
         cv2.imshow('Video Capture', frame)
+        cv2.imshow('Laplacian', laplacian)
+        cv2.imshow('sobelx', sobelx)
+        cv2.imshow('sobely', sobely)
         # cv2.imshow('trial_corener', img)
     print "[*]FPS =",fpscnt/(time.time()-strt)
+
     return True
 
 if __name__ == "__main__":
