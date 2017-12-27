@@ -23,7 +23,7 @@ def main():
             cv2.destroyAllWindows()
             break
 
-        frame = vs.read()
+        frame = cv2.flip(vs.read(),camera_settings['flip'])
         cnt+=1
         if frame is None:
             print "Error !"
