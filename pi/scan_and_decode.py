@@ -41,8 +41,7 @@ def main():
 #            print len(codes.bar)
             for c in codes.bar:
                 print c.data
-        print "Frame Done"
-        triangle = detecttriangle.DetectTriangle(100, gray)
+        triangle = detecttriangle.DetectTriangle(30, gray)
         triangle_present = triangle.has_triangle(frame, DEBUG=False)
         triangle_location = triangle.location
     print "[*]FPS =",cnt/(time.time()-strt)
