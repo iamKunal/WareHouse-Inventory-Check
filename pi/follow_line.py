@@ -19,7 +19,7 @@ def main():
     cnt = 0
     strt = time.time()
     while True:
-        if cv2.waitKey(100) & 0xFF == ord('q'):       #q to quit
+        if cv2.waitKey(1) & 0xFF == ord('q'):       #q to quit
             cv2.destroyAllWindows()
             break
 
