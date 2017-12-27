@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import cv2
 import math
+import numpy as np
 
 def vector(p1, p2):
     return [a-b for a,b in zip (p1,p2)]
@@ -24,6 +25,7 @@ class Rectangle:
     thresh = None
     max_area =-float('inf')
     location = None
+    contour = None
     def __init__(self,thresh_area,thresh):
         self.thresh=thresh
         self.thresh_area=thresh_area
@@ -31,12 +33,15 @@ class Rectangle:
         # ret,thresh = cv2.threshold(self.thresh,100,255,1)
         if DEBUG:
             cv2.imshow('threshold', self.thresh)
-        _,contours,h = cv2.findContours(self.thresh,1,2)
-        for cnt in contours:
-            area = cv2.contourArea(cnt)
-            approx = cv2.approxPolyDP(cnt,0.02*cv2.arcLength(cnt,True),True)
+        ## Changed to CHAIN_APPROX_NONE for all points inside contour
+        _,contours,h = cv2.findContours(self.thresh,1, cv2.CHAIN_APPROX_NONE)
+        if not contours:
+            return False
+        cnt = max(contours, key=cv2.contourArea)
+        area = cv2.contourArea(cnt)
+        approx = cv2.approxPolyDP(cnt,0.001*cv2.arcLength(cnt,True),True)
 #            print len(approx)
-            if len(approx)>=4 and area > self.thresh_area and area > self.max_area:
+        if len(approx)>=4 and area > self.thresh_area and area > self.max_area:
 #                print "triangle"
 #                print cnt[0]
 #                print 'area =', area
@@ -49,12 +54,13 @@ class Rectangle:
 # #                print ans
 #                 angles = [ k*180/math.pi for k in angles]
 #                print ans
-                # if isEquilateral(angles):
-                #     self.max_area=area
-                if img is not None:
-                    cv2.drawContours(img,[approx],0,(0,255,0),-1)
-                    cv2.imshow('triangle',img)
-                self.location=approx
+            # if isEquilateral(angles):
+            #     self.max_area=area
+            if img is not None:
+                cv2.drawContours(img,[approx],0,(0,255,0),-1)
+                cv2.imshow('triangle',img)
+            self.location=np.array([a[0] for a in approx])
+            self.contour=cnt
         if self.location is not None:
             return True
         else:
