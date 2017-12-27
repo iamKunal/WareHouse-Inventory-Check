@@ -36,10 +36,10 @@ def main():
         rectangle.has_rectangle(img=frame, DEBUG=True)
         if rectangle.contour is not None:
             ## Centroid of the area
-            M = cv2.moments(rectangle.contour)
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
-            cv2.circle(frame, (cx,cy), 10, (0,0,225), 5)
+            # M = cv2.moments(rectangle.contour)
+            # cx = int(M['m10']/M['m00'])
+            # cy = int(M['m01']/M['m00'])
+            # cv2.circle(frame, (cx,cy), 10, (0,0,225), 5)
             
             ## Get all points inside the yellow line
             cnt=np.array([a[0] for a in rectangle.contour])
