@@ -53,7 +53,7 @@ class DetectTriangle:
                     self.max_area=area
                     if img is not None:
                         cv2.drawContours(img,[approx],0,(0,255,0),-1)
-                        cv2.imshow('triangle',img)
+                        cv2.imshow('Rectangle',img)
                     self.location=approx
         if self.location is not None:
             return True
