@@ -108,7 +108,36 @@ def arm_and_takeoff_nogps(aTargetAltitude):
     calibrate_yaw()
     brake()
     print("[Time Taken = %f s ]" %(time.time()-start))
-    os.system("espeak Calibrated")
+    # os.system("espeak Calibrated")
+
+def go_to_height(aTargetAltitude):
+    thrust = DEFAULT_TAKEOFF_THRUST
+    while True:
+        current_altitude = vehicle.location.global_relative_frame.alt
+        print " Altitude: ", current_altitude
+        if current_altitude >= aTargetAltitude-0.3: # Trigger just below target alt.
+            print "Reached target altitude"
+            break
+        elif current_altitude >= aTargetAltitude*0.6:
+            thrust = SMOOTH_TAKEOFF_THRUST
+        set_attitude(thrust = thrust)
+        time.sleep(0.1)
+    calibrate_yaw()
+    brake()
+def decendto(aTargetAltitude):
+    thrust = 1.0 - DEFAULT_TAKEOFF_THRUST
+    while True:
+        current_altitude = vehicle.location.global_relative_frame.alt
+        print " Altitude: ", current_altitude
+        if current_altitude <= aTargetAltitude*1.3:
+            thrust = 1.0 - SMOOTH_TAKEOFF_THRUST
+        if current_altitude <= aTargetAltitude+0.3: # Trigger just below target alt.
+            print "Reached target altitude"
+            break
+        set_attitude(thrust = thrust)
+        time.sleep(0.1)
+    calibrate_yaw()
+    brake()
 
 def brake(duration=3):
     vehicle.mode=VehicleMode('BRAKE')
@@ -199,6 +228,7 @@ def turn(strng):
 def strafe(direction,duration=0):
     calibrate_yaw()
     roll_angle=pith_angle=0
+    thrust=0.5
     if(strng.lower[0]=='f'):
         pitch_angle=-PUSH_VALUE
     if(strng.lower[0]=='b'):
@@ -207,7 +237,11 @@ def strafe(direction,duration=0):
         roll_angle=-PUSH_VALUE
     if(strng.lower[0]=='r'):
         roll_angle=PUSH_VALUE
-    set_attitude(pitch_angle=pitch_angle,roll_angle=roll_angle,duration=duration)
+    if(strng.lower[0]=='u'):
+        thrust=0.55
+    if(strng.lower[0]=='d'):
+        thrust=0.45
+    set_attitude(pitch_angle=pitch_angle,roll_angle=roll_angle, thrust=0.5,duration=duration)
     time.sleep(1)
     brake()
 if __name__ == "__main__":

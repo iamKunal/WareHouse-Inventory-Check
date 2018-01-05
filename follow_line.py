@@ -49,6 +49,7 @@ def main():
             M = cv2.moments(rectangle.contour)
             cx = int(M['m10']/M['m00'])
             cy = int(M['m01']/M['m00'])
+            print cx
             cv2.circle(frame, (cx,cy), 10, (0,0,225), 5)
             
             ## Get all points inside the yellow line
