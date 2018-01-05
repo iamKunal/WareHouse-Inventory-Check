@@ -9,7 +9,7 @@ import numpy as np
 import time
 from imutils.video.pivideostream import PiVideoStream
 from pi_camera_settings import camera_settings
-
+import imutils
 
 def Zoom(cv2Object, zoomSize):
     # Resizes the image/video frame to the specified amount of "zoomSize".
