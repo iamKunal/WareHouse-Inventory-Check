@@ -23,7 +23,7 @@ def Zoom(cv2Object, zoomSize):
     # image[y1:y2,x1:x2] is used to iterate and grab a portion of an image
     # (y1,x1) is the top left corner and (y2,x1) is the bottom right corner of new cropped frame.
     cv2Object = cv2Object[cropScale[0]:(center[0] + cropScale[0]), cropScale[1]:(center[1] + cropScale[1])]
-
+    return cv2Object
 def main():
     # Select and start Camera.
     vs = PiVideoStream(camera_settings['resolution'],camera_settings['fps']).start()
@@ -59,8 +59,8 @@ def main():
         triangle = detecttriangle.DetectTriangle(30, gray)
         triangle_present = triangle.has_triangle(frame, DEBUG=False)
         triangle_location = triangle.location
-        Zoom(frame, 2)
-        cv2.imshow("zoom", frame)
+        zoom = Zoom(frame, 2)
+        cv2.imshow("zoom", zoom)
     print "[*]FPS =",cnt/(time.time()-strt)
     return True
 

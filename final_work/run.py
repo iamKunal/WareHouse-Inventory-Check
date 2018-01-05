@@ -15,10 +15,14 @@ import no_guided
 import has_codes
 
 
+FRAME_AREA = camera_settings['resolution'][0] * camera_settings['resolution'][1]
+
 INITIAL_TARGET_ALTITUDE=2
-THRESHOLD_LANDING_AREA=camera_settings['resolution'][0] * camera_settings['resolution'][1] * 0.5
+THRESHOLD_LANDING_AREA=FRAME_AREA * 0.5
 THRESHOLD_LANDING_TILT=20
 THRESHOLD_TURN_TILT = 60
+
+THRESH_QR_AREA = FRAME_AREA * 
 
 vs = None #Pi Video Stream
 capture  = None #Webcam Video Stream
@@ -75,6 +79,8 @@ def phase1():
 	    	#Successfully Reached the Yellow line
 	    	break
 def scan_phase():
+	QRCODE = None
+	Triangle_Present = False
 	while True:				#Loop for getting Yellow Strip to follow
 		if cv2.waitKey(1) & 0xFF == ord('q'):       #q to quit
 		    cv2.destroyAllWindows()
@@ -86,15 +92,19 @@ def scan_phase():
         cv2.imshow('Video Capture', frame)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
 	    no_guided.strafe("left", duration=0)
+
 		ret,thresh = cv2.threshold(gray,127,255,1)
 		cv2.imshow('Gray', np.hstack([gray,thresh]))
 		codes = hascodes.GetCodes()
 		codes.scan(gray)
+		current_area=None
 		if codes.hasQR:
 		   print len(codes.qr)
 		   for c in codes.qr:
 		       print c.data
+		       current_area=codes.area
 		if codes.hasBar:
 		   print len(codes.bar)
 		   for c in codes.bar:
@@ -103,6 +113,15 @@ def scan_phase():
 		triangle = detecttriangle.DetectTriangle(100, gray)
 		triangle_present = triangle.has_triangle(frame)
 		triangle_location = triangle.location
+		if codes.hasQR and triangle_present:
+			QRCODE = codes.qr[0].data
+			Triangle_Present = True
+			break
+		if current_area > THRESH_QR_AREA:
+			QRCODE = codes.qr[0].data
+			break
+
+
 
 
 
@@ -171,6 +190,7 @@ def scan_phase():
 	        for i in range(1):
 	            cv2.line(path_frame, (edges[i][0][0], edges[i][0][1]), (edges[i][0][2], edges[i][0][3]), (0, 0, 255), 3, cv2.LINE_AA)
 	    	print "Strip Found, going left for scanning"
+	    	scan_phase()
 
 	    except:
 	        print "Strip not found"

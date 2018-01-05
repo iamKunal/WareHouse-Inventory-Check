@@ -26,7 +26,7 @@ def main():
         cv2.imshow('Video Capture', frame)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(gray,127,255,1)
+        ret,thresh = cv2.threshold(gray,100,255,1)
         cv2.imshow('Gray', np.hstack([gray,thresh]))
         codes = hascodes.GetCodes()
         codes.scan(gray)
@@ -40,7 +40,7 @@ def main():
                print c.data
         print "Frame Done"
         triangle = detecttriangle.DetectTriangle(100, gray)
-        triangle_present = triangle.has_triangle(frame)
+        triangle_present = triangle.has_triangle(frame ,DEBUG=True)
         triangle_location = triangle.location
     return True
 

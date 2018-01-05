@@ -8,7 +8,7 @@ import numpy as np
 import detectrectangles
 
 # IP webcam URL
-url = 'http://192.168.0.104:4747/cam/1/frame.jpg'
+url = 'http://192.168.43.1:4747/cam/1/frame.jpg'
 def main():
     # # Select and start Camera.
     # DEVICE_NO = 0
