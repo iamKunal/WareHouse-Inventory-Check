@@ -3,12 +3,6 @@ from pymavlink import mavutil # Needed for command message definitions
 import time
 import math
 import os
-from dronekit import connect, VehicleMode, LocationGlobal, LocationGlobalRelative
-from pymavlink import mavutil # Needed for command message definitions
-import time
-import math
-import os
-
 
 #Set up option parsing to get connection string
 import argparse  
@@ -23,6 +17,11 @@ PITCH_ROLL_QUADRANT = {
 }
 LOITER_DURATION=0
 initial_yaw = 0.0
+
+
+def connect_to_vehicle(connection_string, wait_ready=True):
+    vehicle = connect(connection_string, wait_ready=True)
+
 def avg(lst):
     return sum(l)/len(l)
 def arm_and_takeoff(aTargetAltitude):
