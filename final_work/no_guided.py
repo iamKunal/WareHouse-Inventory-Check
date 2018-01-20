@@ -69,23 +69,25 @@ def arm_and_takeoff_nogps(aTargetAltitude):
     print "Basic pre-arm checks"
     # Don't let the user try to arm until autopilot is ready
     # If you need to disable the arming check, just comment it with your own responsibility.
-    while not vehicle.is_armable:
-        print " Waiting for vehicle to initialise..."
-        time.sleep(1)
+#    while not vehicle.is_armable:
+#        print " Waiting for vehicle to initialise..."
+#        time.sleep(1)
 
+    vehicle.mode = VehicleMode("GUIDED_NOGPS")
+    
     initial_yaw=vehicle.attitude.yaw
     start=time.time()
     print "Arming motors"
     # Copter should arm in GUIDED_NOGPS mode
 
     vehicle.mode = VehicleMode("GUIDED_NOGPS")
-    # vehicle.mode = VehicleMode("GUIDED")
+#    vehicle.mode = VehicleMode("GUIDED")
     vehicle.armed = True
 
     while not vehicle.armed:
         print " Waiting for arming..."
         time.sleep(1)
-
+    set_attitude(thrust=0.5,duration=5)
     print "Taking off!"
 
 
@@ -140,8 +142,7 @@ def decendto(aTargetAltitude):
     brake()
 
 def brake(duration=3):
-    vehicle.mode=VehicleMode('BRAKE')
-    time.sleep(duration)
+    set_attitude()
     vehicle.mode=VehicleMode('GUIDED_NOGPS')
 
 def set_attitude(roll_angle = 0.0, pitch_angle = 0.0, yaw_rate = 0.0, thrust = 0.5, duration = 0):
@@ -254,7 +255,8 @@ if __name__ == "__main__":
     connection_string = args.connect
     sitl = None
 
-    connection_string = '127.0.0.1:14552'
+    connection_string = '127.0.0.1:14551'
+#    connection_string= '/dev/ttyACM0'
 
     #Start SITL if no connection string specified
     if not connection_string:
